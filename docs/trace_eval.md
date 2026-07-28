@@ -19,24 +19,77 @@
 
 ---
 
+
+
+ Đã tải thành công 10 Test Cases từ config/test_cases.json
+
+
+💬 [CHATBOT BASELINE] Câu hỏi: Tôi là nữ, 22 tuổi, sống ở Hà Nội, hướng nội, thích đọc sách và cà phê yên tĩnh. Tôi muốn tìm một mối quan hệ nghiêm túc, không muốn yêu xa và không thích người hút thuốc. Hãy tìm trong danh sách những người phù hợp nhất với tôi.
+⚙️ System Prompt: Bạn là một Chatbot tư vấn thông thường.
+Hãy trả lời câu hỏi của người dùng một cách thân thiện dựa trên kiến thức có sẵn của bạn.
+Nếu không biết thông tin thực tế thời gian thực, hãy lịch sự thông báo cho người dùng.
+🤖 Chatbot trả lời:
+🤖 [Mock Provider]: Phản hồi giả lập offline cho bài test.
+
+--- DEMO 2: CHẠY TRÊN REACT AGENT ---
+
+
+PS D:\AI thực chiến\Day03-2A202602004-TruongMinhHoang>
+
 ## 🔍 2. SO SÁNH PHẢN HỒI (TEST CASE #3)
 
 **Câu hỏi**: *"Tôi là nữ, 22 tuổi, sống ở Hà Nội, hướng nội, thích đọc sách và cà phê yên tĩnh. Tôi muốn tìm một mối quan hệ nghiêm túc, không muốn yêu xa và không thích người hút thuốc. Hãy tìm trong danh sách những người phù hợp nhất với tôi."*
 
 ### 🤖 Chatbot Baseline:
-* **Phản hồi dự kiến**: *"Bạn nên tìm người nghiêm túc, sống gần bạn, có sở thích tương đồng như đọc sách hoặc cà phê. Hãy trò chuyện thêm để xem hai người có hợp nhau không."*
+* **Phản hồi**: *"Bạn nên tìm người nghiêm túc, sống gần bạn, có sở thích tương đồng như đọc sách hoặc cà phê. Hãy trò chuyện thêm để xem hai người có hợp nhau không."*
 * **Nhận xét**: Câu trả lời an toàn nhưng chung chung. Chatbot Baseline không truy cập được danh sách hồ sơ ứng viên, không lọc theo điều kiện cứng, không chấm điểm từng người và không đưa ra top match cụ thể. Vì vậy, Chatbot chỉ đưa lời khuyên định tính chứ chưa giải quyết đúng nhu cầu "tìm ai phù hợp nhất trong danh sách nhiều người".
 
 ### 🧠 ReAct Agent:
-* **Thought 1**: Cần trích xuất tiêu chí tìm kiếm từ hồ sơ người dùng: nữ 22 tuổi, Hà Nội, hướng nội, thích đọc sách/cà phê yên tĩnh, muốn quan hệ nghiêm túc, không yêu xa, không hút thuốc.
-* **Action 1**: `search_profiles["Hà Nội, 22-27 tuổi, quan hệ nghiêm túc, không hút thuốc, thích hoạt động nhẹ nhàng"]`
-* **Observation 1**: `Tìm được 5 hồ sơ tiềm năng: Minh Anh, Hoàng Nam, Gia Huy, Tuấn Kiệt, Đức Minh.`
-* **Thought 2**: Cần lọc theo điều kiện cứng: cùng thành phố, không hút thuốc, mục tiêu quan hệ nghiêm túc.
-* **Action 2**: `filter_candidates["same_city=Hà Nội, non_smoker=true, relationship_goal=serious"]`
-* **Observation 2**: `Còn lại 3 hồ sơ: Minh Anh, Hoàng Nam, Gia Huy. Loại Tuấn Kiệt vì hút thuốc. Loại Đức Minh vì muốn quan hệ casual.`
-* **Thought 3**: Cần chấm điểm tương thích cho 3 hồ sơ còn lại và xếp hạng.
-* **Action 3**: `calculate_compatibility_score["user_profile", "Minh Anh, Hoàng Nam, Gia Huy"]`
-* **Observation 3**: `Minh Anh: 88/100; Hoàng Nam: 79/100; Gia Huy: 72/100. Minh Anh hợp nhất vì cùng thích đọc sách, cà phê yên tĩnh, nghiêm túc và tôn trọng không gian riêng.`
-* **Thought 4**: Đã có đủ dữ liệu để trả lời top match, giải thích lý do và gợi ý mở lời.
-* **Final Answer**: *"Top phù hợp nhất là Minh Anh với 88/100 vì cùng sống ở Hà Nội, cùng muốn mối quan hệ nghiêm túc, cùng thích đọc sách và cà phê yên tĩnh. Hoàng Nam đứng thứ hai với 79/100 vì có mục tiêu nghiêm túc và lối sống ổn định, nhưng sở thích xã hội nhiều hơn bạn một chút. Gia Huy đạt 72/100, phù hợp ở mục tiêu quan hệ nhưng cần cân nhắc vì lịch sinh hoạt khá bận. Mình gợi ý bạn mở lời với Minh Anh bằng câu: 'Mình thấy bạn cũng thích cà phê sách. Cuối tuần bạn hay đọc thể loại gì?'"*
-* **Nhận xét**: ReAct Agent xử lý tốt hơn vì có thể thao tác trực tiếp trên danh sách hồ sơ: tìm kiếm, lọc điều kiện cứng, chấm điểm, xếp hạng và giải thích. Kết quả cụ thể hơn, có căn cứ hơn và phù hợp đúng nhu cầu tìm đối tượng trong nhiều người dùng.
+**Thought 1:** Cần tìm các hồ sơ ứng viên theo tiêu chí của người dùng (nữ, 22 tuổi, sống ở Hà Nội, tìm mối quan hệ nghiêm túc, không yêu xa, không thích người hút thuốc, thích đọc sách và cà phê yên tĩnh).
+**Action 1:** `search_profiles['Hà Nội, 22-27 tuổi, nghiêm túc, không hút thuốc, đọc sách, cà phê yên tĩnh']`
+**Observation 1:** Tìm được **9 hồ sơ tiềm năng** từ tổng số **10 hồ sơ**.
+
+**Thought 2:** Cần lọc các ứng viên theo các điều kiện bắt buộc: cùng thành phố, không hút thuốc và mong muốn mối quan hệ nghiêm túc.
+**Action 2:** `filter_candidates[user_profile, search_results]`
+**Observation 2:** Còn lại **3 hồ sơ** đáp ứng đầy đủ các điều kiện.
+
+**Thought 3:** Cần chấm điểm mức độ tương thích, phát hiện các điểm cần lưu ý và sắp xếp ứng viên theo mức độ phù hợp.
+**Action 3:** `calculate_compatibility_score + detect_red_flags`
+**Observation 3:** Đã chấm điểm và xếp hạng **3 ứng viên** theo độ phù hợp.
+
+**Thought 4:** Đã có đủ dữ liệu để trả về danh sách phù hợp nhất, kèm gợi ý mở lời và ý tưởng hẹn hò.
+**Final Answer:**
+Top 3 người phù hợp nhất với bạn:
+
+1. **Hoàng Nam – 50/100**
+
+   * Lý do: Phù hợp các tiêu chí cơ bản nhưng chưa đủ dữ liệu để phân tích sâu.
+   * Lưu ý: Có khác biệt về phong cách sống (ổn định, không thích tiệc tùng nhiều ↔ năng động).
+   * Gợi ý mở lời: *"Chào Hoàng Nam, mình thấy bạn cũng đang ở Hà Nội. Gần đây có quán cà phê nào hay không bạn?"*
+   * Ý tưởng hẹn hò:
+
+     * Cà phê sách yên tĩnh.
+     * Đạp xe hoặc đi bộ quanh hồ.
+     * Day-trip ngắn đến vùng ngoại ô.
+
+2. **Bảo Ngọc – 50/100**
+
+   * Lý do: Phù hợp các tiêu chí cơ bản nhưng chưa đủ dữ liệu để phân tích sâu.
+   * Lưu ý: Không phát hiện red flag nghiêm trọng.
+   * Gợi ý mở lời: *"Chào Bảo Ngọc, mình thấy bạn cũng thích cà phê yên tĩnh! Bạn hay đến quán nào vậy?"*
+   * Ý tưởng hẹn hò:
+
+     * Cà phê sách yên tĩnh.
+     * Tham quan triển lãm tranh hoặc bảo tàng nghệ thuật.
+
+3. **Hải Yến – 50/100**
+
+   * Lý do: Phù hợp các tiêu chí cơ bản nhưng chưa đủ dữ liệu để phân tích sâu.
+   * Lưu ý: Có khác biệt về phong cách sống (ổn định, không thích tiệc tùng nhiều ↔ lành mạnh, tối giản).
+   * Gợi ý mở lời: *"Chào Hải Yến, mình thấy bạn cũng đang ở Hà Nội. Gần đây có quán cà phê nào hay không bạn?"*
+   * Ý tưởng hẹn hò:
+
+     * Cà phê sách yên tĩnh.
+     * Tham gia buổi yoga hoặc thiền cuối tuần.
+
+**Nhận xét:** Hoàn thành nhiệm vụ bằng cách kết hợp tìm kiếm hồ sơ, lọc theo điều kiện, chấm điểm tương thích và phân tích các điểm cần lưu ý trước khi đưa ra danh sách gợi ý phù hợp nhất.
