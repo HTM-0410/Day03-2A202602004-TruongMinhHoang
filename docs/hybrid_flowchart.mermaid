@@ -1,0 +1,46 @@
+flowchart TD
+    A([User input]) --> B{Safety violation?}
+
+    B -->|Yes| C["Block request\nNo tool call\nExplain consent and boundaries"]
+    C --> Z([End])
+
+    B -->|No| D{Invalid input?}
+    D -->|Yes| E["Validation response\nAge/date/location issue\nNo ReAct tool chain"]
+    E --> Z
+
+    D -->|No| F{Off-topic?}
+    F -->|Yes| G["Domain guardrail\nCupid only handles dating/matching"]
+    G --> Z
+
+    F -->|No| H{Simple dating question?}
+    H -->|Yes| I["Chatbot baseline path\nUse CHATBOT_BASELINE_PROMPT\nNo structured tools"]
+    I --> Z
+
+    H -->|No| J["ReAct Agent path"]
+    J --> K["Step 0: parse_user_profile\nMerge existing profile context"]
+    K --> L{Enough profile info?}
+    L -->|No| M["Ask clarification\nNeed age/location/interests/goal/target gender"]
+    M --> Z
+
+    L -->|Yes| N["Step 1 Action: search_profiles"]
+    N --> O["Observation: candidate list"]
+    O --> P["Step 2 Action: filter_candidates"]
+    P --> Q{Target gender specified?}
+    Q -->|No| R["Guardrail: ask user to clarify\nDo not assume preference"]
+    R --> Z
+
+    Q -->|Yes| S{Any candidate left?}
+    S -->|No| T["Empty result fallback\nSuggest widening criteria"]
+    T --> Z
+
+    S -->|Yes| U["Step 3 Action: calculate_compatibility_score"]
+    U --> V["Step 4 Action: rank_matches"]
+    V --> W["Step 5 Action: detect_red_flags"]
+    W --> X["Optional Action: suggest_opening_message / suggest_date_ideas"]
+    X --> Y["Final Answer\nTop matches + reasons + warnings"]
+    Y --> Z
+
+    J --> AA{iteration >= MAX_ITERATIONS?}
+    AA -->|Yes| AB["Emergency stop\nReturn best available result"]
+    AB --> Z
+    AA -->|No| K
