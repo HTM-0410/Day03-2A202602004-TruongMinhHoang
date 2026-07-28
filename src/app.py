@@ -25,11 +25,10 @@ if sys.stdout.encoding != 'utf-8':
 
 # Import các thành phần từ file của Role 2, Role 3 & Multi-Provider Adapter
 from tools import (
+    MOCK_CANDIDATES,
     calculate_compatibility_score,
     detect_red_flags,
     filter_candidates,
-    load_candidates,
-    load_current_user,
     rank_matches,
     search_profiles,
     suggest_date_ideas,
@@ -70,8 +69,27 @@ def run_react_agent(user_query: str, provider):
     Dựng vòng lặp ReAct Agent (Thought -> Action -> Observation) có Guardrails.
     """
     print(f"\n🤖 [REACT AGENT] Câu hỏi: {user_query}")
-    user_profile = load_current_user()
-    all_candidates = load_candidates()
+    user_profile = {
+        "name": "Linh",
+        "gender": "nữ",
+        "age": 22,
+        "location": "Hà Nội",
+        "hobbies": ["đọc sách", "cà phê yên tĩnh", "trò chuyện sâu"],
+        "personality": "hướng nội",
+        "relationship_goal": "nghiêm túc",
+        "lifestyle": "ổn định, không thích tiệc tùng quá nhiều",
+        "deal_breakers": ["hút thuốc", "yêu xa"],
+    }
+    user_profile_json = json.dumps(user_profile, ensure_ascii=False)
+    all_candidates = MOCK_CANDIDATES
+
+    def parse_tool_json(raw_value, fallback):
+        if isinstance(raw_value, (dict, list)):
+            return raw_value
+        try:
+            return json.loads(raw_value)
+        except (TypeError, json.JSONDecodeError):
+            return fallback
 
     def is_serious_goal(candidate):
         goal = candidate.get("relationship_goal", "").lower()
@@ -81,13 +99,18 @@ def run_react_agent(user_query: str, provider):
     print("🧠 Thought: Cần tìm các hồ sơ ứng viên theo tiêu chí người dùng.")
     criteria = "Hà Nội, 22-27 tuổi, nghiêm túc, không hút thuốc, đọc sách, cà phê yên tĩnh"
     print(f"🛠️ Action: search_profiles['{criteria}']")
-    search_results = search_profiles(criteria)
+    search_results_json = search_profiles(criteria)
+    search_results = parse_tool_json(search_results_json, [])
     print(f"👁️ Observation: Tìm được {len(search_results)} hồ sơ tiềm năng từ {len(all_candidates)} hồ sơ.")
 
     print(f"\n--- 🔄 Vòng lặp ReAct (Step 2/{MAX_ITERATIONS}) ---")
     print("🧠 Thought: Cần lọc theo điều kiện cứng: cùng thành phố, không hút thuốc, mục tiêu nghiêm túc.")
     print("🛠️ Action: filter_candidates[user_profile, search_results]")
-    filtered = filter_candidates(user_profile, search_results)
+    filtered_json = filter_candidates(user_profile_json, json.dumps(search_results, ensure_ascii=False))
+    filtered = parse_tool_json(filtered_json, [])
+    if isinstance(filtered, dict) and filtered.get("error"):
+        print(f"👁️ Observation: {filtered.get('message', 'Không lọc được ứng viên.')}")
+        filtered = []
     serious_filtered = [c for c in filtered if is_serious_goal(c)]
     print(f"👁️ Observation: Còn lại {len(serious_filtered)} hồ sơ phù hợp điều kiện cứng.")
 
@@ -96,14 +119,18 @@ def run_react_agent(user_query: str, provider):
     print("🛠️ Action: calculate_compatibility_score + detect_red_flags")
     scored_candidates = []
     for candidate in serious_filtered:
-        score = calculate_compatibility_score(user_profile, candidate)
-        warnings = detect_red_flags(user_profile, candidate)
-        scored_candidates.append({
-            "candidate": candidate,
-            "score": score,
-            "warnings": warnings,
-        })
-    ranked = rank_matches(scored_candidates)
+        candidate_json = json.dumps(candidate, ensure_ascii=False)
+        scored_json = calculate_compatibility_score(user_profile_json, candidate_json)
+        scored = parse_tool_json(scored_json, candidate)
+        if isinstance(scored, dict) and "error" in scored:
+            scored = dict(candidate)
+            scored["compatibility_score"] = 50
+            scored["compatibility_reason"] = "Không chấm điểm tự động được, dùng điểm mặc định để demo."
+        warnings = detect_red_flags(user_profile_json, json.dumps(scored, ensure_ascii=False))
+        scored["warnings"] = warnings
+        scored_candidates.append(scored)
+    ranked_json = rank_matches(json.dumps(scored_candidates, ensure_ascii=False))
+    ranked = parse_tool_json(ranked_json, [])
     print(f"👁️ Observation: Đã chấm điểm {len(ranked)} hồ sơ và sắp xếp theo độ phù hợp.")
 
     print(f"\n--- 🔄 Vòng lặp ReAct (Step 4/{MAX_ITERATIONS}) ---")
@@ -111,17 +138,20 @@ def run_react_agent(user_query: str, provider):
     top_matches = ranked[:3]
     print("🏁 Final Answer:")
     print("Top 3 người phù hợp nhất với bạn:")
-    for match in top_matches:
-        candidate = match["candidate"]
-        opening = suggest_opening_message(user_profile, candidate)
-        date_ideas = suggest_date_ideas(user_profile, candidate, budget="Trung bình", location=user_profile.get("location", "Hà Nội"))
-        risk_text = "; ".join(match["warnings"]) if match["warnings"] else "Chưa thấy rủi ro lớn."
-        first_date = date_ideas[0]["name"] if date_ideas else "Cà phê trò chuyện nhẹ nhàng"
-        print(f"{match['rank']}. {candidate['name']} - {match['score']}/100")
-        print(f"   Lý do: {candidate.get('notes', 'Có nhiều điểm phù hợp với hồ sơ của bạn.')}")
+    if not top_matches:
+        print("Chưa tìm được hồ sơ phù hợp. Bạn có thể nới tiêu chí về tuổi, vị trí hoặc sở thích.")
+        return
+
+    for index, candidate in enumerate(top_matches, start=1):
+        candidate_json = json.dumps(candidate, ensure_ascii=False)
+        opening = suggest_opening_message(user_profile_json, candidate_json)
+        date_ideas = suggest_date_ideas(user_profile_json, candidate_json, budget="Trung bình", location=user_profile.get("location", "Hà Nội"))
+        risk_text = candidate.get("warnings") or "Chưa thấy rủi ro lớn."
+        print(f"{index}. {candidate['name']} - {candidate.get('compatibility_score', 50)}/100")
+        print(f"   Lý do: {candidate.get('compatibility_reason') or candidate.get('notes', 'Có nhiều điểm phù hợp với hồ sơ của bạn.')}")
         print(f"   Lưu ý: {risk_text}")
         print(f"   Gợi ý mở lời: {opening}")
-        print(f"   Ý tưởng date: {first_date}")
+        print(f"   Ý tưởng date: {date_ideas}")
 
 
 if __name__ == "__main__":
