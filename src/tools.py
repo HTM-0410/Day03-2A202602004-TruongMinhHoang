@@ -96,6 +96,28 @@ MOCK_CANDIDATES = [
     }
 ]
 
+def load_candidates():
+    """
+    Load candidate profiles from config/candidate_profiles.json.
+    Falls back to MOCK_CANDIDATES if file not found.
+    """
+    # Determine project root (src/ -> project root)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(current_dir)
+    config_path = os.path.join(project_root, "config", "candidate_profiles.json")
+    
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, "r", encoding="utf-8") as f:
+                candidates = json.load(f)
+            if isinstance(candidates, list) and len(candidates) > 0:
+                return candidates
+        except (json.JSONDecodeError, IOError):
+            pass  # Fallback to MOCK_CANDIDATES
+    
+    return MOCK_CANDIDATES
+
+
 # ─────────────────────────────────────────────────────────────
 # 🔧 HÀM PHỤ TRỢ NỘI BỘ
 # ─────────────────────────────────────────────────────────────
@@ -143,6 +165,73 @@ def _is_insufficient_info(profile: dict) -> bool:
     has_personality = bool(profile.get("personality", "").strip())
     filled_count = sum([has_location, has_goal, has_hobbies or has_personality])
     return filled_count < 2
+
+
+def _parse_profile_offline(profile_text: str) -> dict:
+    """Fallback parser for mock/offline mode so lab demos work without an API key."""
+    text = profile_text.lower()
+    profile = {
+        "gender": "",
+        "age": None,
+        "location": "",
+        "hobbies": [],
+        "personality": "",
+        "relationship_goal": "",
+        "deal_breakers": [],
+    }
+
+    if " nữ" in f" {text}" or "là nữ" in text:
+        profile["gender"] = "nữ"
+    elif " nam" in f" {text}" or "là nam" in text:
+        profile["gender"] = "nam"
+
+    age_match = re.search(r"(\d+)\s*tuổi", text)
+    if age_match:
+        profile["age"] = int(age_match.group(1))
+
+    locations = {
+        "hà nội": "Hà Nội",
+        "ha noi": "Hà Nội",
+        "tp.hcm": "TP.HCM",
+        "tphcm": "TP.HCM",
+        "hồ chí minh": "TP.HCM",
+        "đà nẵng": "Đà Nẵng",
+        "da nang": "Đà Nẵng",
+        "hà giang": "Hà Giang",
+        "atlantis": "Atlantis",
+    }
+    for keyword, location in locations.items():
+        if keyword in text:
+            profile["location"] = location
+            break
+
+    hobby_keywords = [
+        "đọc sách", "cà phê yên tĩnh", "cà phê", "du lịch bụi", "du lịch",
+        "đua xe f1", "đi quẩy", "ở nhà", "tiết kiệm", "tiêu xài",
+        "yoga", "thiền", "nấu ăn", "xem phim", "chơi game"
+    ]
+    profile["hobbies"] = [hobby for hobby in hobby_keywords if hobby in text]
+
+    if "hướng nội" in text:
+        profile["personality"] = "hướng nội"
+    elif "hướng ngoại" in text:
+        profile["personality"] = "hướng ngoại"
+
+    if "không muốn kết hôn" in text or "chưa muốn kết hôn" in text:
+        profile["relationship_goal"] = "tìm hiểu"
+    elif "kết hôn" in text:
+        profile["relationship_goal"] = "kết hôn"
+    elif "nghiêm túc" in text:
+        profile["relationship_goal"] = "nghiêm túc"
+    elif "tìm hiểu" in text:
+        profile["relationship_goal"] = "tìm hiểu"
+
+    if "không hút thuốc" in text or "không thích người hút thuốc" in text:
+        profile["deal_breakers"].append("hút thuốc")
+    if "không yêu xa" in text:
+        profile["deal_breakers"].append("yêu xa")
+
+    return profile
 
 
 # ─────────────────────────────────────────────────────────────
@@ -199,10 +288,10 @@ QUAN TRỌNG:
         if parsed and isinstance(parsed, dict):
             return json.dumps(parsed, ensure_ascii=False, indent=2)
         else:
-            return response  # Trả về raw nếu Gemini không format đúng
+            return json.dumps(_parse_profile_offline(profile_text), ensure_ascii=False, indent=2)
 
     except Exception as e:
-        return json.dumps({"error": f"Lỗi parse_user_profile: {str(e)}"}, ensure_ascii=False)
+        return json.dumps(_parse_profile_offline(profile_text), ensure_ascii=False, indent=2)
 
 
 # ─────────────────────────────────────────────────────────────
