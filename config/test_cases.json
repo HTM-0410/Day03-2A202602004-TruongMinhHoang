@@ -1,0 +1,73 @@
+[
+  {
+    "id": 1,
+    "category": "Đơn giản",
+    "user_profile": {
+      "age": 22,
+      "gender": "Nữ",
+      "location": "Hà Nội",
+      "personality": "Hướng nội",
+      "interests": ["đọc sách"],
+      "relationship_goal": "nghiêm túc",
+      "deal_breakers": ["hút thuốc", "yêu xa"]
+    },
+    "question": "Cho tôi biết 3 lời khuyên hẹn hò.",
+    "expected": "Chatbot trả lời từ kiến thức LLM"
+  },
+  {
+    "id": 2,
+    "category": "Multi-step",
+    "user_profile": {
+      "age": 22,
+      "gender": "Nữ",
+      "location": "Hà Nội",
+      "personality": "Hướng nội",
+      "interests": ["đọc sách", "cà phê yên tĩnh", "nói chuyện sâu"],
+      "relationship_goal": "nghiêm túc",
+      "deal_breakers": ["hút thuốc", "yêu xa"]
+    },
+    "question": "Tìm người phù hợp với tôi: nữ 22 tuổi ở Hà Nội, hướng nội, thích đọc sách và nói chuyện sâu, tìm mối quan hệ nghiêm túc, không hút thuốc và không muốn yêu xa.",
+    "expected": "Agent gọi search_profiles → filter_candidates → calculate_compatibility"
+  },
+  {
+    "id": 3,
+    "category": "Edge Case",
+    "user_profile": {
+      "age": 22,
+      "gender": "Nữ",
+      "location": "Hà Nội",
+      "personality": "Hướng nội",
+      "interests": ["đọc sách"],
+      "relationship_goal": "nghiêm túc",
+      "deal_breakers": ["hút thuốc"]
+    },
+    "question": "Tìm giúp tôi người có thói quen hút thuốc ở Hà Nội.",
+    "expected": "Agent phát hiện violation với deal_breakers của user và cảnh báo guardrail/lọc bỏ ứng viên hút thuốc"
+  },
+  {
+    "id": 4,
+    "category": "Multi-tool",
+    "user_profile": {
+      "age": 22,
+      "gender": "Nữ",
+      "location": "Hà Nội",
+      "personality": "Hướng nội",
+      "interests": ["đọc sách", "cà phê yên tĩnh"],
+      "relationship_goal": "nghiêm túc",
+      "deal_breakers": ["hút thuốc", "yêu xa"]
+    },
+    "question": "Hãy tìm Top 3 match phù hợp nhất với mình kèm gợi ý tin nhắn mở lời và ý tưởng đi date cho từng người.",
+    "expected": "Agent gọi search_profiles → filter_candidates → calculate_compatibility_score → rank_matches + suggest_opening_message + suggest_date_ideas"
+  },
+  {
+    "id": 5,
+    "category": "Edge Case",
+    "user_profile": {
+      "age": 22,
+      "gender": "Nữ",
+      "location": "Hà Nội"
+    },
+    "question": "Tìm người 500 tuổi ở đại dương Atlantis.",
+    "expected": "Tool báo lỗi / không tìm thấy dữ liệu + Guardrail ngắt trả lời lịch sự"
+  }
+]
