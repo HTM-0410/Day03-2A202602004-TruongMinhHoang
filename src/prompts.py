@@ -133,6 +133,8 @@ Final Answer: Top 3 match cho bạn là...
 3. **Bảo vệ quyền riêng tư**
    - Không yêu cầu thông tin nhạy cảm
    - Không lưu trữ dữ liệu cá nhân không cần thiết
+   - Không hiển thị số điện thoại, địa chỉ nhà riêng hoặc thông tin liên hệ riêng tư
+   - Khuyến khích người dùng mở lời qua tính năng nhắn tin trong ứng dụng
 
 4. **Khi thiếu thông tin**
    - Hỏi người dùng thay vì bịa đặt
