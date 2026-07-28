@@ -240,11 +240,30 @@ def _parse_profile_offline(profile_text: str) -> dict:
     return profile
 
 
+def _merge_profiles(base: dict, update: dict) -> dict:
+    """Merge update dict vào base dict. Giữ base cho các trường rỗng/null trong update."""
+    if not base:
+        return update or {}
+    if not update:
+        return base
+    
+    merged = base.copy()
+    for key, value in update.items():
+        # Chỉ ghi đè nếu value mới có nội dung (không rỗng, không null)
+        if value is not None and value != "" and value != []:
+            if isinstance(value, list) and isinstance(merged.get(key), list):
+                # Merge lists (loại bỏ trùng lặp)
+                merged[key] = list(set(merged[key]) | set(value))
+            else:
+                merged[key] = value
+    return merged
+
+
 # ─────────────────────────────────────────────────────────────
 # ✅ TOOL 1: PARSE USER PROFILE  (sử dụng Gemini API)
 # ─────────────────────────────────────────────────────────────
 
-def parse_user_profile(profile_text: str) -> str:
+def parse_user_profile(profile_text: str, existing_profile: dict = None) -> str:
     """
     [Tool 1] Phân tích đoạn văn bản / câu chat tự do của người dùng,
     trích xuất thành hồ sơ JSON chuẩn dùng cho các bước tìm kiếm & match.
@@ -252,6 +271,7 @@ def parse_user_profile(profile_text: str) -> str:
 
     Args:
         profile_text (str): Đoạn văn bản giới thiệu bản thân hoặc câu chat của người dùng.
+        existing_profile (dict, optional): Hồ sơ đã có từ trước, sẽ được merge với thông tin mới.
 
     Returns:
         str: JSON string gồm các field: gender, age, location, hobbies,
@@ -266,6 +286,9 @@ def parse_user_profile(profile_text: str) -> str:
         }, ensure_ascii=False)
 
     if not profile_text or not profile_text.strip():
+        # Không có text mới → giữ nguyên existing profile
+        if existing_profile:
+            return json.dumps(existing_profile, ensure_ascii=False, indent=2)
         return json.dumps({}, ensure_ascii=False)
 
     try:
@@ -287,18 +310,25 @@ def parse_user_profile(profile_text: str) -> str:
 
 QUAN TRỌNG:
 - Chỉ trả về JSON thuần túy. KHÔNG giải thích, KHÔNG markdown, KHÔNG ```json```.
-- Nếu không tìm thấy thông tin, dùng giá trị rỗng ("", null, hoặc [])."""
+- Nếu không tìm thấy thông tin, dùng giá trị rỗng ("", null, hoặc []).
+- Giữ nguyên thông tin cũ nếu người dùng KHÔNG cung cấp thông tin mới cho trường đó."""
 
         response = provider.generate(prompt=profile_text, system_prompt=system_prompt)
         parsed = _parse_json_arg(response)
 
         if parsed and isinstance(parsed, dict):
-            return json.dumps(parsed, ensure_ascii=False, indent=2)
+            # Merge: existing_profile làm base, parsed ghi đè
+            merged = _merge_profiles(existing_profile or {}, parsed)
+            return json.dumps(merged, ensure_ascii=False, indent=2)
         else:
-            return json.dumps(_parse_profile_offline(profile_text), ensure_ascii=False, indent=2)
+            parsed_offline = _parse_profile_offline(profile_text)
+            merged = _merge_profiles(existing_profile or {}, parsed_offline)
+            return json.dumps(merged, ensure_ascii=False, indent=2)
 
     except Exception as e:
-        return json.dumps(_parse_profile_offline(profile_text), ensure_ascii=False, indent=2)
+        parsed_offline = _parse_profile_offline(profile_text)
+        merged = _merge_profiles(existing_profile or {}, parsed_offline)
+        return json.dumps(merged, ensure_ascii=False, indent=2)
 
 
 # ─────────────────────────────────────────────────────────────
@@ -390,10 +420,21 @@ def filter_candidates(user_profile: str, candidate_profiles: str) -> str:
     user_location = user.get("location", "").strip().lower()
     user_gender = user.get("gender", "").strip().lower()
     target_gender = user.get("target_gender", "").strip().lower()
+    target_gender_inferred = False  # Flag để track xem có phải tự inference không
+    
+    # KHÔNG tự động infer giới tính khác - yêu cầu user phải nói rõ
+    # Nếu user không đề cập target_gender, return empty với message yêu cầu clarify
     if not target_gender and user_gender in {"nam", "nữ"}:
-        # Demo lab mặc định ghép đôi khác giới khi người dùng không nói rõ preference.
-        # Nếu muốn hỗ trợ mọi xu hướng, truyền target_gender rõ ràng trong user_profile.
-        target_gender = "nữ" if user_gender == "nam" else "nam"
+        # Check xem trong user input gốc có đề cập không (qua extra field)
+        user_mentioned_target = user.get("_user_mentioned_target_gender", False)
+        if not user_mentioned_target:
+            # User không nói rõ muốn tìm ai → không tự động filter
+            # Trả về tất cả candidates (sẽ được rank sau)
+            return json.dumps({
+                "candidates": candidates,
+                "warning": "USER_DID_NOT_SPECIFY_TARGET_GENDER",
+                "message": "Người dùng chưa nói rõ muốn tìm bạn trai hay bạn gái. Vui lòng hỏi lại người dùng."
+            }, ensure_ascii=False)
     user_deal_breakers = [db.lower().strip() for db in user.get("deal_breakers", [])]
     no_long_distance = "yêu xa" in user_deal_breakers
 

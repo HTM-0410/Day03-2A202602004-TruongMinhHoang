@@ -34,22 +34,13 @@ from tools import (
     suggest_date_ideas,
 )
 from providers import get_llm_provider
-from prompts import CHATBOT_BASELINE_PROMPT, REACT_SYSTEM_PROMPT, MAX_ITERATIONS
-
-# ============================================================================
-# 🔧 CONSTANTS & CONFIG
-# ============================================================================
-
-FORBIDDEN_KEYWORDS = [
-    "ép buộc", "bắt buộc", "theo dõi", "hack", "xâm nhập",
-    "thao túng", "bẫy", "lừa", "chiếm đoạt", "làm hại", "cưỡng bức",
-    "stalk", "force", "manipulate", "spy", "kidnap", "ép yêu", "đe dọa"
-]
-
-SIMPLE_QUERY_KEYWORDS = [
-    "là gì", "thế nào", "tư vấn", "cho hỏi", "giải thích",
-    "khái niệm", "lời khuyên", "khác gì", "concept", "explain", "advice", "tip", "mẹo"
-]
+from prompts import (
+    CHATBOT_BASELINE_PROMPT,
+    REACT_SYSTEM_PROMPT,
+    MAX_ITERATIONS,
+    FORBIDDEN_KEYWORDS,
+    OFFTOPIC_KEYWORDS
+)
 
 # ============================================================================
 # 🔧 HELPER FUNCTIONS
@@ -69,6 +60,23 @@ def is_safety_violation(text: str) -> bool:
     """Kiểm tra vi phạm an toàn (Guardrail G4)"""
     text_lower = text.lower()
     return any(kw in text_lower for kw in FORBIDDEN_KEYWORDS)
+
+
+def is_offtopic(text: str) -> bool:
+    """Kiểm tra câu hỏi off-topic (Guardrail G6)"""
+    text_lower = text.lower()
+    # Câu hỏi off-topic nếu chỉ chứa keywords off-topic và KHÔNG chứa keywords dating
+    dating_keywords = ["tìm", "hẹn", "yêu", "đôi", "ghép", "match", "hôn", "bạn trai", "bạn gái", "người yêu", "quen"]
+    has_dating = any(kw in text_lower for kw in dating_keywords)
+    if has_dating:
+        return False
+    return any(kw in text_lower for kw in OFFTOPIC_KEYWORDS)
+
+
+SIMPLE_QUERY_KEYWORDS = [
+    "là gì", "thế nào", "tư vấn", "cho hỏi", "giải thích",
+    "khái niệm", "lời khuyên", "khác gì", "concept", "explain", "advice", "tip", "mẹo"
+]
 
 
 def is_simple_query(text: str) -> bool:
@@ -140,11 +148,16 @@ def check_insufficient_info(profile: dict) -> bool:
 # 🚀 ROUTER: Simple vs Multi-step Query
 # ============================================================================
 
-def route_query(user_input: str, provider) -> str:
+def route_query(user_input: str, provider, existing_profile: dict = None) -> str:
     """
     Routing: Phân biệt câu hỏi simple vs multi-step (Test 1, 2)
     - Simple: Trả lời trực tiếp bằng baseline chatbot
     - Multi-step: Sử dụng ReAct agent với tools
+    
+    Args:
+        user_input: Câu hỏi của user
+        provider: LLM provider
+        existing_profile: Profile đã có từ session trước (để nhớ context)
     """
     # Guardrail: Safety check TRƯỚC TIÊN
     if is_safety_violation(user_input):
@@ -159,6 +172,20 @@ Mỗi người đều có quyền tự do lựa chọn. Hãy để kết nối d
 
 *Nếu bạn đang gặp vấn đề về mối quan hệ, hãy thử hỏi tôi về cách giao tiếp hiệu quả hoặc tư vấn hẹn hò nhé!* 💕"""
 
+    # Guardrail G6: Off-topic check
+    if is_offtopic(user_input):
+        return """💕 **Cupid chuyên về hẹn hò và tìm kiếm bạn đời!**
+
+Bạn có thể hỏi tôi về:
+- 🔍 Tìm người phù hợp với tiêu chí của bạn
+- 💯 Đánh giá độ tương thích
+- 💬 Gợi ý mở lời với người mình thích
+- 📅 Lên kế hoạch hẹn hò
+- ⚠️ Cảnh báo red flags trong mối quan hệ
+- ❤️ Lời khuyên tình cảm
+
+Hãy cho tôi biết bạn đang tìm gì nhé! 😊"""
+
     # Validate input (Test 7)
     is_valid, error_msg = validate_input(user_input)
     if not is_valid:
@@ -169,27 +196,32 @@ Mỗi người đều có quyền tự do lựa chọn. Hãy để kết nối d
         print(f"\n💬 [ROUTING] Simple query → Baseline Chatbot")
         return provider.generate(user_input, system_prompt=CHATBOT_BASELINE_PROMPT)
     
-    # Multi-step query → ReAct Agent
+    # Multi-step query → ReAct Agent (truyền existing_profile để nhớ context)
     print(f"\n🤖 [ROUTING] Multi-step query → ReAct Agent")
-    return run_react_agent(user_input, provider)
+    return run_react_agent(user_input, provider, existing_profile)
 
 
 # ============================================================================
 # 🤖 REACT AGENT IMPLEMENTATION
 # ============================================================================
 
-def run_react_agent(user_query: str, provider=None) -> str:
+def run_react_agent(user_query: str, provider=None, existing_profile: dict = None) -> str:
     """
     ReAct Agent với đầy đủ Guardrails đã fix
-    Fix: Parse user_query thực, không hard-code
+    Fix: Parse user_query thực + merge với existing profile để nhớ context
+    
+    Args:
+        user_query: Câu hỏi của user
+        provider: LLM provider
+        existing_profile: Profile đã có từ session trước
     """
     if provider is None:
         provider = get_llm_provider()
     
     print(f"\n🤖 [REACT AGENT] Câu hỏi: {user_query}")
     
-    # Bước 0: Parse user profile từ câu hỏi THỰC (FIX ROOT CAUSE)
-    parsed_result = parse_user_profile(user_query)
+    # Bước 0: Parse user profile từ câu hỏi THỰC + MERGE với existing profile
+    parsed_result = parse_user_profile(user_query, existing_profile=existing_profile)
     user_profile = parse_json_safe(parsed_result, {})
     
     # Guardrail G1: Thiếu thông tin → hỏi lại (Test 9)
@@ -237,13 +269,23 @@ Càng nhiều thông tin, tôi càng tìm được người phù hợp với b�
     print(f"\n--- 🔄 Step 2/MAX_ITERATIONS ---")
     print(f"🛠️ Action: filter_candidates")
     filtered_json = filter_candidates(user_profile_json, json.dumps(search_results, ensure_ascii=False))
-    filtered = parse_json_safe(filtered_json, [])
+    filtered_data = parse_json_safe(filtered_json, None)
+    
+    # Guardrail G5: User chưa nói rõ muốn tìm giới tính nào
+    if isinstance(filtered_data, dict) and filtered_data.get("warning") == "USER_DID_NOT_SPECIFY_TARGET_GENDER":
+        user_gender = user_profile.get("gender", "")
+        target_gender_suggestion = "bạn trai" if user_gender.lower() == "nữ" else "bạn gái"
+        return f"""💕 **Cupid muốn hỏi bạn một chút để tìm người phù hợp nhé!**
+
+Bạn là **{user_gender}** và muốn tìm **{target_gender_suggestion}** đúng không? Hay bạn muốn tìm người cùng giới?
+
+Vui lòng cho mình biết để Cupid có thể giới thiệu đúng người phù hợp nhé! 😊"""
     
     # Guardrail G2: Không tìm thấy kết quả (Test 6)
-    if isinstance(filtered, dict) and filtered.get("error"):
+    if isinstance(filtered_data, dict) and filtered_data.get("error"):
         return f"""😔 **Cupid chưa tìm thấy ai phù hợp với tiêu chí hiện tại của bạn.**
 
-{filtered.get('message', '')}
+{filtered_data.get('message', '')}
 
 Bạn có muốn thử:
 - 🔄 Mở rộng khoảng cách địa lý (chấp nhận yêu xa)?
@@ -252,7 +294,11 @@ Bạn có muốn thử:
 
 Hãy cho tôi biết để điều chỉnh nhé! 😊"""
     
-    if not filtered or (isinstance(filtered, list) and len(filtered) == 0):
+    # Đảm bảo filtered là list (sau khi xử lý G5)
+    if isinstance(filtered_data, list):
+        filtered = filtered_data
+    else:
+        filtered = []
         return """😔 **Cupid chưa tìm thấy ai phù hợp với tiêu chí hiện tại của bạn.**
 
 Có thể do:
@@ -278,6 +324,13 @@ Bạn có muốn thử điều chỉnh một số tiêu chí không? 😊"""
             # Thêm red flags
             warnings = detect_red_flags(user_profile_json, cand_json)
             scored["red_flags"] = warnings
+            
+            # Fallback nếu thiếu fields
+            if "compatibility_score" not in scored:
+                scored["compatibility_score"] = 50
+            if "compatibility_reason" not in scored or not scored["compatibility_reason"]:
+                scored["compatibility_reason"] = scored.get("notes", "Phù hợp dựa trên thông tin có sẵn.")
+            
             scored_candidates.append(scored)
     
     if not scored_candidates:

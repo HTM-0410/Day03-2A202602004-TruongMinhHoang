@@ -90,6 +90,22 @@ except Exception as e:
     AVAILABLE_TOOLS = {}
     HAS_ROUTING = False
 
+# Import Intent Classification System
+try:
+    from src.prompts import (
+        classify_intent,
+        handle_user_input,
+        IntentType,
+    )
+    HAS_INTENT_CLASSIFIER = True
+    dbg_log("H5", "Intent classifier imported", {})
+except Exception as e:
+    dbg_log("H5", "Intent classifier import FAILED", {
+        "error_type": type(e).__name__,
+        "error_msg": str(e),
+    })
+    HAS_INTENT_CLASSIFIER = False
+
 # Page config
 st.set_page_config(
     page_title="Cupid Agent - Trợ lý hẹn hò",
@@ -193,15 +209,34 @@ def parse_json_safe(json_str, fallback=None):
 
 def process_user_message(user_input: str, user_profile: dict, candidates: list, provider=None) -> tuple:
     """
-    Process user message using fixed routing logic from app.py
+    Process user message using rule-based intent classification + ReAct routing.
     """
+    
+    # ─── STEP 1: Rule-based Intent Classification ───
+    if HAS_INTENT_CLASSIFIER:
+        try:
+            rule_response, intent, should_use_react = handle_user_input(user_input)
+            
+            # Nếu là greeting, farewell, thanks, help, off-topic, small_talk, unknown
+            # → Trả lời ngay bằng rule-based, KHÔNG gọi ReAct
+            if not should_use_react and rule_response is not None:
+                dbg_log("H5", "Rule-based response", {
+                    "intent": intent.value if hasattr(intent, 'value') else str(intent),
+                    "input_length": len(user_input)
+                })
+                return (rule_response, user_profile, None)
+        except Exception as e:
+            dbg_log("H5", "Intent classifier error", {"error": str(e)})
+    
+    # ─── STEP 2: ReAct routing cho DATING intents ───
     # Use routing from app.py if available
     if HAS_ROUTING:
         try:
-            response = route_query(user_input, provider)
+            # Truyền user_profile đã có để route_query có context
+            response = route_query(user_input, provider, user_profile)
             
-            # Try to extract updated profile from response
-            parsed = parse_user_profile(user_input)
+            # Try to extract updated profile - MERGE với existing
+            parsed = parse_user_profile(user_input, existing_profile=user_profile)
             new_profile = parse_json_safe(parsed, None)
             if new_profile and isinstance(new_profile, dict) and not new_profile.get("error"):
                 return (response, new_profile, None)
@@ -212,8 +247,8 @@ def process_user_message(user_input: str, user_profile: dict, candidates: list, 
     # Fallback to inline processing
     user_input_lower = user_input.lower()
     
-    # Parse user profile from input
-    parsed = parse_user_profile(user_input)
+    # Parse user profile from input - MERGE với existing
+    parsed = parse_user_profile(user_input, existing_profile=user_profile)
     profile = parse_json_safe(parsed, {})
     
     if profile and not profile.get("error"):
