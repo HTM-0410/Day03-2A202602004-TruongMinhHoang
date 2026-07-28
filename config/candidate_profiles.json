@@ -1,0 +1,353 @@
+[
+  {
+    "id": 1,
+    "name": "Minh Anh",
+    "age": 24,
+    "gender": "Nam",
+    "location": "Hà Nội",
+    "personality": "hướng nội, điềm tĩnh, biết lắng nghe, chu đáo",
+    "interests": [
+      "đọc sách",
+      "cà phê yên tĩnh",
+      "nói chuyện sâu",
+      "nhạc acoustic"
+    ],
+    "relationship_goal": "Nghiêm túc",
+    "lifestyle": "cú đêm nhẹ, Không yêu xa",
+    "occupation": "N/A",
+    "smoking": false,
+    "drinking": "Hiếm khi",
+    "deal_breakers": [
+      "Hút thuốc"
+    ],
+    "bio": "Mình là một người khá trầm tính, thích những buổi tối đọc sách với một ly cà phê. Đang tìm một mối quan hệ nghiêm túc, muốn tìm hiểu lâu dài chứ không chỉ trò chuyện qua loa.",
+    "important_criteria": [
+      "không hút thuốc",
+      "tôn trọng không gian riêng",
+      "giao tiếp thẳng thắn"
+    ],
+    "notes": "Khá bận vào cuối tuần vì lịch làm việc freelance, nên cần hẹn lịch trước.",
+    "long_distance_ok": false
+  },
+  {
+    "id": 2,
+    "name": "Hoàng Nam",
+    "age": 26,
+    "gender": "Nam",
+    "location": "Hà Nội",
+    "personality": "hướng nội vừa phải, chững chạc, hài hước nhẹ nhàng",
+    "interests": [
+      "cà phê",
+      "phim indie",
+      "đi bộ đường dài",
+      "đọc sách"
+    ],
+    "relationship_goal": "Nghiêm túc",
+    "lifestyle": "dậy sớm, Không yêu xa",
+    "occupation": "N/A",
+    "smoking": false,
+    "drinking": "Xã giao",
+    "deal_breakers": [
+      "Hút thuốc"
+    ],
+    "bio": "Mình sống khá cân bằng, vừa thích ở nhà đọc sách vừa thích đi cà phê cuối tuần. Đang nghiêm túc tìm một người để xây dựng mối quan hệ lâu dài.",
+    "important_criteria": [
+      "không hút thuốc",
+      "sống ở Hà Nội hoặc sẵn sàng chuyển đến"
+    ],
+    "notes": "Từng có một mối quan hệ yêu xa không thành công nên khá dè dặt với yêu xa.",
+    "long_distance_ok": false
+  },
+  {
+    "id": 3,
+    "name": "Gia Huy",
+    "age": 23,
+    "gender": "Nam",
+    "location": "Hà Nội",
+    "personality": "hướng nội, nhạy cảm, sáng tạo",
+    "interests": [
+      "viết lách",
+      "nhạc acoustic",
+      "cà phê sách",
+      "nhiếp ảnh"
+    ],
+    "relationship_goal": "Nghiêm túc",
+    "lifestyle": "cú đêm, Không yêu xa",
+    "occupation": "N/A",
+    "smoking": false,
+    "drinking": "Không",
+    "deal_breakers": [
+      "Hút thuốc"
+    ],
+    "bio": "Mình làm sáng tạo nội dung, hướng nội nhưng khi quen thân thì khá vui vẻ. Thích không gian yên tĩnh và những cuộc trò chuyện có chiều sâu, đang tìm một mối quan hệ nghiêm túc.",
+    "important_criteria": [
+      "không hút thuốc",
+      "kiên nhẫn",
+      "thích sự riêng tư"
+    ],
+    "notes": "Đôi khi trả lời tin nhắn chậm vì tập trung công việc sáng tạo, không phải dấu hiệu thiếu quan tâm.",
+    "long_distance_ok": false
+  },
+  {
+    "id": 4,
+    "name": "Thu Trang",
+    "age": 25,
+    "gender": "Nữ",
+    "location": "TP. Hồ Chí Minh",
+    "personality": "hướng ngoại, năng động, quảng giao",
+    "interests": [
+      "du lịch",
+      "tiệc tùng",
+      "ẩm thực đường phố",
+      "chụp ảnh"
+    ],
+    "relationship_goal": "Tìm bạn",
+    "lifestyle": "cú đêm, Chấp nhận yêu xa",
+    "occupation": "N/A",
+    "smoking": false,
+    "drinking": "Thường xuyên",
+    "deal_breakers": [
+      "Hút thuốc",
+      "Không chung thủy"
+    ],
+    "bio": "Mình năng động, thích khám phá thành phố mới và gặp gỡ nhiều người. Hiện chưa vội tìm mối quan hệ nghiêm túc, muốn tìm hiểu từ từ trước.",
+    "important_criteria": [
+      "vui vẻ",
+      "cởi mở",
+      "thích đi chơi"
+    ],
+    "notes": "Sống ở TP.HCM, không cùng khu vực nên khó gặp mặt thường xuyên nếu đối phương ở Hà Nội.",
+    "long_distance_ok": true
+  },
+  {
+    "id": 5,
+    "name": "Đức Anh",
+    "age": 27,
+    "gender": "Nam",
+    "location": "Hà Nội",
+    "personality": "hướng nội, trầm ổn",
+    "interests": [
+      "đọc sách",
+      "cà phê",
+      "trò chuyện sâu",
+      "leo núi cuối tuần"
+    ],
+    "relationship_goal": "Nghiêm túc",
+    "lifestyle": "dậy sớm, Không yêu xa",
+    "occupation": "N/A",
+    "smoking": true,
+    "drinking": "Xã giao",
+    "deal_breakers": [
+      "Hút thuốc",
+      "Không chung thủy"
+    ],
+    "bio": "Mình thích không gian tĩnh lặng, đọc sách và cà phê một mình cũng không thấy chán. Đang tìm một mối quan hệ nghiêm túc, ổn định.",
+    "important_criteria": [
+      "thoải mái về thói quen sống",
+      "không áp đặt"
+    ],
+    "notes": "Hút thuốc lá thường xuyên (khoảng nửa bao/ngày), cần trao đổi rõ nếu đối phương không thích khói thuốc.",
+    "long_distance_ok": false
+  },
+  {
+    "id": 6,
+    "name": "Bảo Ngọc",
+    "age": 22,
+    "gender": "Nữ",
+    "location": "Hà Nội",
+    "personality": "hướng nội, phóng khoáng",
+    "interests": [
+      "đọc sách",
+      "cà phê yên tĩnh",
+      "vẽ tranh"
+    ],
+    "relationship_goal": "Không rõ",
+    "lifestyle": "linh hoạt, Chấp nhận yêu xa",
+    "occupation": "N/A",
+    "smoking": false,
+    "drinking": "Hiếm khi",
+    "deal_breakers": [
+      "Hút thuốc",
+      "Không chung thủy"
+    ],
+    "bio": "Mình thích sự nhẹ nhàng, đọc sách và cà phê yên tĩnh nhưng hiện tại chưa muốn ràng buộc, chỉ muốn kết bạn và trò chuyện thoải mái.",
+    "important_criteria": [
+      "không áp lực cam kết",
+      "tôn trọng ranh giới"
+    ],
+    "notes": "Đã nói rõ hiện chưa sẵn sàng cho mối quan hệ nghiêm túc, cần tôn trọng mong muốn này.",
+    "long_distance_ok": true
+  },
+  {
+    "id": 7,
+    "name": "Quang Huy",
+    "age": 31,
+    "gender": "Nam",
+    "location": "Hà Nội",
+    "personality": "hướng nội, chín chắn, thực tế",
+    "interests": [
+      "cà phê",
+      "đọc sách kinh doanh",
+      "chạy bộ"
+    ],
+    "relationship_goal": "Nghiêm túc",
+    "lifestyle": "dậy sớm, Không yêu xa",
+    "occupation": "N/A",
+    "smoking": false,
+    "drinking": "Xã giao",
+    "deal_breakers": [
+      "Hút thuốc"
+    ],
+    "bio": "Mình ổn định công việc, đang nghiêm túc tìm bạn đời. Thích những buổi tối yên tĩnh và các hoạt động nhẹ nhàng cuối tuần.",
+    "important_criteria": [
+      "không hút thuốc",
+      "sẵn sàng cho hôn nhân trong 1-2 năm tới"
+    ],
+    "notes": "Chênh lệch tuổi khá lớn so với nhóm 22-27, cần cân nhắc về giai đoạn cuộc sống.",
+    "long_distance_ok": false
+  },
+  {
+    "id": 8,
+    "name": "Lan Phương",
+    "age": 24,
+    "gender": "Nữ",
+    "location": "Hà Nội",
+    "personality": "hướng nội, chu đáo, độc lập",
+    "interests": [
+      "đọc sách",
+      "cà phê",
+      "yoga",
+      "nấu ăn"
+    ],
+    "relationship_goal": "Nghiêm túc",
+    "lifestyle": "dậy sớm, Không yêu xa",
+    "occupation": "N/A",
+    "smoking": false,
+    "drinking": "Không",
+    "deal_breakers": [
+      "Hút thuốc"
+    ],
+    "bio": "Mình hướng nội, thích ở nhà đọc sách hoặc ra quán cà phê quen thuộc ngồi làm việc. Đang tìm một mối quan hệ nghiêm túc và ổn định.",
+    "important_criteria": [
+      "không hút thuốc",
+      "sống lành mạnh"
+    ],
+    "notes": "Hồ sơ phù hợp tiêu chí nhưng cùng giới tính nữ với người dùng mẫu trong tài liệu nên không nằm trong nhóm đối tượng tìm kiếm mặc định — hữu ích cho việc test bộ lọc giới tính/thiên hướng.",
+    "long_distance_ok": false
+  },
+  {
+    "id": 9,
+    "name": "Việt Anh",
+    "age": 25,
+    "gender": "Nam",
+    "location": "Đà Nẵng",
+    "personality": "hướng nội, kiên định",
+    "interests": [
+      "đọc sách",
+      "cà phê",
+      "leo núi"
+    ],
+    "relationship_goal": "Nghiêm túc",
+    "lifestyle": "dậy sớm, Chấp nhận yêu xa",
+    "occupation": "N/A",
+    "smoking": false,
+    "drinking": "Hiếm khi",
+    "deal_breakers": [
+      "Yêu xa"
+    ],
+    "bio": "Mình thích cà phê yên tĩnh, đọc sách và tìm một mối quan hệ nghiêm túc lâu dài, sẵn sàng yêu xa nếu hợp nhau.",
+    "important_criteria": [
+      "sẵn sàng yêu xa",
+      "giao tiếp thường xuyên"
+    ],
+    "notes": "Sống ở Đà Nẵng, không cùng vị trí Hà Nội; phù hợp nếu người dùng chấp nhận yêu xa (ở đây người dùng mẫu từ chối yêu xa).",
+    "long_distance_ok": true
+  },
+  {
+    "id": 10,
+    "name": "Mai Chi",
+    "age": 29,
+    "gender": "Nữ",
+    "location": "Hà Nội",
+    "personality": "hướng ngoại, quyết đoán, bận rộn",
+    "interests": [
+      "networking",
+      "tiệc rượu",
+      "du lịch ngắn ngày"
+    ],
+    "relationship_goal": "Không rõ",
+    "lifestyle": "cú đêm, Chấp nhận yêu xa",
+    "occupation": "N/A",
+    "smoking": true,
+    "drinking": "Thường xuyên",
+    "deal_breakers": [
+      "Hút thuốc",
+      "Không chung thủy"
+    ],
+    "bio": "Mình bận rộn với công việc kinh doanh riêng, thích tiệc tùng và mở rộng networking hơn là những buổi tối yên tĩnh. Không tìm mối quan hệ ràng buộc lúc này.",
+    "important_criteria": [
+      "linh hoạt về thời gian",
+      "không kỳ vọng cam kết sớm"
+    ],
+    "notes": "Thói quen sống (tiệc tùng, hút thuốc) khá đối lập với người hướng nội thích không gian yên tĩnh.",
+    "long_distance_ok": true
+  },
+  {
+    "id": 11,
+    "name": "Tuấn Kiệt",
+    "age": 26,
+    "gender": "Nam",
+    "location": "Hà Nội",
+    "personality": "hướng nội, điềm đạm",
+    "interests": [
+      "đọc sách",
+      "cà phê yên tĩnh",
+      "nói chuyện sâu"
+    ],
+    "relationship_goal": "Nghiêm túc",
+    "lifestyle": "cú đêm nhẹ, Không yêu xa",
+    "occupation": "N/A",
+    "smoking": true,
+    "drinking": "Xã giao",
+    "deal_breakers": [
+      "Hút thuốc",
+      "Không chung thủy"
+    ],
+    "bio": "Mình thích đọc sách, cà phê yên tĩnh và những cuộc trò chuyện sâu sắc. Đang tìm một mối quan hệ nghiêm túc, ổn định lâu dài.",
+    "important_criteria": [
+      "thoải mái về thói quen sống",
+      "không áp đặt"
+    ],
+    "notes": "Hút thuốc lá (khoảng 5-10 điếu/ngày), nên bị loại khi lọc theo tiêu chí 'không hút thuốc' dù các mặt khác rất khớp.",
+    "long_distance_ok": false
+  },
+  {
+    "id": 12,
+    "name": "Đức Minh",
+    "age": 24,
+    "gender": "Nam",
+    "location": "Hà Nội",
+    "personality": "hướng nội, dễ chịu",
+    "interests": [
+      "cà phê yên tĩnh",
+      "đọc sách",
+      "nghe podcast"
+    ],
+    "relationship_goal": "Không rõ",
+    "lifestyle": "linh hoạt, Chấp nhận yêu xa",
+    "occupation": "N/A",
+    "smoking": false,
+    "drinking": "Hiếm khi",
+    "deal_breakers": [
+      "Hút thuốc",
+      "Không chung thủy"
+    ],
+    "bio": "Mình thích cà phê yên tĩnh và đọc sách, nhưng hiện tại mình ưu tiên tìm hiểu qua lại thoải mái, chưa nghĩ đến chuyện nghiêm túc hay ràng buộc lâu dài.",
+    "important_criteria": [
+      "không áp lực cam kết",
+      "tôn trọng ranh giới"
+    ],
+    "notes": "Mục tiêu quan hệ là 'casual/không ràng buộc', không khớp với người tìm mối quan hệ nghiêm túc nên bị loại ở bước filter_candidates dù sở thích bề mặt khá giống.",
+    "long_distance_ok": true
+  }
+]

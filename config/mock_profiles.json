@@ -1,0 +1,523 @@
+{
+  "current_user": {
+    "id": "user_001",
+    "name": "Linh",
+    "age": 22,
+    "gender": "female",
+    "location": "Hà Nội",
+    "personality": ["hướng nội", "điềm tĩnh", "thích trò chuyện sâu"],
+    "interests": ["đọc sách", "cà phê yên tĩnh", "đi triển lãm", "viết nhật ký"],
+    "relationship_goal": "serious",
+    "lifestyle": {
+      "smoking": false,
+      "drinking": "occasionally",
+      "weekend_style": "quiet",
+      "preferred_date_time": ["Saturday evening", "Sunday afternoon"]
+    },
+    "deal_breakers": ["hút thuốc", "yêu xa", "quan hệ casual"],
+    "preferences": {
+      "age_range": [22, 27],
+      "locations": ["Hà Nội"],
+      "must_have": ["không hút thuốc", "mục tiêu nghiêm túc"],
+      "nice_to_have": ["thích đọc sách", "thích cà phê", "tôn trọng không gian riêng"]
+    }
+  },
+  "search_criteria": {
+    "target_age_range": [22, 27],
+    "target_locations": ["Hà Nội"],
+    "relationship_goal": "serious",
+    "non_smoker_required": true,
+    "long_distance_allowed": false,
+    "preferred_traits": ["điềm tĩnh", "tôn trọng không gian riêng", "biết lắng nghe"],
+    "preferred_interests": ["đọc sách", "cà phê", "triển lãm", "phim nghệ thuật"]
+  },
+  "candidate_profiles": [
+    {
+      "id": "candidate_001",
+      "name": "Minh Anh",
+      "age": 24,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["điềm tĩnh", "biết lắng nghe", "tôn trọng không gian riêng"],
+      "interests": ["đọc sách", "cà phê sách", "đi triển lãm", "nhạc acoustic"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "rarely",
+        "weekend_style": "quiet",
+        "availability": ["Saturday evening", "Sunday afternoon"]
+      },
+      "notes": "Tìm mối quan hệ nghiêm túc, thích những cuộc trò chuyện sâu và ít ồn ào.",
+      "expected_match_score": 88,
+      "expected_strengths": [
+        "Cùng sống ở Hà Nội",
+        "Cùng muốn mối quan hệ nghiêm túc",
+        "Cùng thích đọc sách và cà phê yên tĩnh",
+        "Tôn trọng không gian riêng"
+      ],
+      "expected_risks": ["Khá bận vào tối thứ Sáu, nên cần hẹn trước"]
+    },
+    {
+      "id": "candidate_002",
+      "name": "Hoàng Nam",
+      "age": 26,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["ổn định", "trách nhiệm", "hơi hướng ngoại"],
+      "interests": ["cà phê", "chạy bộ", "xem phim", "du lịch ngắn ngày"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "occasionally",
+        "weekend_style": "balanced",
+        "availability": ["Saturday morning", "Sunday afternoon"]
+      },
+      "notes": "Muốn tìm người có định hướng rõ ràng, thích gặp mặt trực tiếp hơn nhắn tin dài.",
+      "expected_match_score": 79,
+      "expected_strengths": [
+        "Cùng thành phố",
+        "Mục tiêu quan hệ nghiêm túc",
+        "Lối sống khá ổn định",
+        "Có sở thích cà phê và xem phim"
+      ],
+      "expected_risks": ["Có xu hướng hoạt động xã hội nhiều hơn người dùng"]
+    },
+    {
+      "id": "candidate_003",
+      "name": "Gia Huy",
+      "age": 23,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["tham vọng", "chăm chỉ", "hơi ít thời gian"],
+      "interests": ["sách kinh doanh", "cà phê", "podcast", "công nghệ"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "rarely",
+        "weekend_style": "work_first",
+        "availability": ["Sunday evening"]
+      },
+      "notes": "Nghiêm túc trong tình cảm nhưng lịch làm việc khá dày.",
+      "expected_match_score": 72,
+      "expected_strengths": [
+        "Cùng thành phố",
+        "Không hút thuốc",
+        "Có mục tiêu quan hệ nghiêm túc",
+        "Có điểm chung về sách và cà phê"
+      ],
+      "expected_risks": ["Ít thời gian rảnh, có thể khó duy trì tần suất gặp đều"]
+    },
+    {
+      "id": "candidate_004",
+      "name": "Tuấn Kiệt",
+      "age": 25,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["hướng ngoại", "hài hước", "thích tụ tập"],
+      "interests": ["bar", "du lịch", "âm nhạc", "sự kiện đông người"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": true,
+        "drinking": "often",
+        "weekend_style": "social",
+        "availability": ["Friday night", "Saturday night"]
+      },
+      "notes": "Có mục tiêu nghiêm túc nhưng hút thuốc và thích môi trường rất sôi động.",
+      "expected_match_score": 55,
+      "expected_strengths": ["Cùng thành phố", "Có mục tiêu quan hệ nghiêm túc"],
+      "expected_risks": ["Bị loại vì hút thuốc", "Phong cách cuối tuần lệch nhiều với người dùng"]
+    },
+    {
+      "id": "candidate_005",
+      "name": "Đức Minh",
+      "age": 24,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["tự do", "thích trải nghiệm", "không thích ràng buộc"],
+      "interests": ["du lịch bụi", "nhiếp ảnh", "gặp gỡ bạn mới"],
+      "relationship_goal": "casual",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "occasionally",
+        "weekend_style": "adventurous",
+        "availability": ["Saturday afternoon", "Sunday morning"]
+      },
+      "notes": "Hiện chỉ muốn tìm hiểu nhẹ nhàng, chưa muốn cam kết lâu dài.",
+      "expected_match_score": 48,
+      "expected_strengths": ["Cùng thành phố", "Không hút thuốc"],
+      "expected_risks": ["Bị loại vì mục tiêu quan hệ casual"]
+    },
+    {
+      "id": "candidate_006",
+      "name": "Bảo Long",
+      "age": 28,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["ấm áp", "chín chắn", "gia đình"],
+      "interests": ["nấu ăn", "phim tài liệu", "cà phê", "đi dạo"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "rarely",
+        "weekend_style": "quiet",
+        "availability": ["Sunday afternoon"]
+      },
+      "notes": "Phù hợp nhiều mặt nhưng nằm ngoài khoảng tuổi ưu tiên.",
+      "expected_match_score": 70,
+      "expected_strengths": ["Lối sống yên tĩnh", "Không hút thuốc", "Mục tiêu nghiêm túc"],
+      "expected_risks": ["Bị loại hoặc hạ điểm vì vượt khoảng tuổi mong muốn"]
+    },
+    {
+      "id": "candidate_007",
+      "name": "Quang Huy",
+      "age": 22,
+      "gender": "male",
+      "location": "Đà Nẵng",
+      "personality": ["hướng nội", "nhẹ nhàng", "sâu sắc"],
+      "interests": ["đọc sách", "viết lách", "cà phê yên tĩnh"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "rarely",
+        "weekend_style": "quiet",
+        "availability": ["Saturday evening", "Sunday afternoon"]
+      },
+      "notes": "Rất hợp về tính cách và sở thích nhưng khác thành phố.",
+      "expected_match_score": 68,
+      "expected_strengths": ["Tương đồng tính cách", "Cùng thích đọc sách và cà phê yên tĩnh"],
+      "expected_risks": ["Bị loại vì người dùng không muốn yêu xa"]
+    },
+    {
+      "id": "candidate_008",
+      "name": "Nhật Minh",
+      "age": 25,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["lịch sự", "biết lắng nghe", "hơi kín đáo"],
+      "interests": ["phim nghệ thuật", "triển lãm", "cà phê", "sách tâm lý"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "rarely",
+        "weekend_style": "quiet",
+        "availability": ["Saturday evening"]
+      },
+      "notes": "Ứng viên tốt, có nhiều điểm chung nhưng ít chủ động khi nhắn tin.",
+      "expected_match_score": 84,
+      "expected_strengths": [
+        "Cùng thành phố",
+        "Không hút thuốc",
+        "Cùng thích hoạt động yên tĩnh",
+        "Mục tiêu quan hệ nghiêm túc"
+      ],
+      "expected_risks": ["Có thể cần người dùng chủ động mở lời trước"]
+    },
+    {
+      "id": "candidate_009",
+      "name": "Anh Khoa",
+      "age": 23,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["năng động", "tham gia nhiều cộng đồng", "thẳng thắn"],
+      "interests": ["workshop", "networking", "cà phê", "startup"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "occasionally",
+        "weekend_style": "social",
+        "availability": ["Saturday afternoon", "Sunday evening"]
+      },
+      "notes": "Không hút thuốc và nghiêm túc, nhưng nhịp sống xã hội cao.",
+      "expected_match_score": 74,
+      "expected_strengths": ["Cùng thành phố", "Không hút thuốc", "Có mục tiêu nghiêm túc"],
+      "expected_risks": ["Phong cách xã hội có thể khiến người hướng nội nhanh mệt"]
+    },
+    {
+      "id": "candidate_010",
+      "name": "Thanh Tùng",
+      "age": 27,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["trầm ổn", "thực tế", "ít nói"],
+      "interests": ["đi dạo", "đọc sách", "cờ vua", "cà phê tối giản"],
+      "relationship_goal": "undecided",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "rarely",
+        "weekend_style": "quiet",
+        "availability": ["Sunday afternoon"]
+      },
+      "notes": "Rất hợp về nhịp sống nhưng chưa rõ mục tiêu quan hệ.",
+      "expected_match_score": 69,
+      "expected_strengths": ["Lối sống yên tĩnh", "Không hút thuốc", "Có sở thích đọc sách"],
+      "expected_risks": ["Cần hỏi thêm vì mục tiêu quan hệ chưa chắc chắn"]
+    },
+    {
+      "id": "candidate_011",
+      "name": "Khánh Duy",
+      "age": 24,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["nhẹ nhàng", "kiên nhẫn", "biết lắng nghe"],
+      "interests": ["đọc sách", "cà phê yên tĩnh", "đi bộ quanh hồ", "phim nghệ thuật"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "rarely",
+        "weekend_style": "quiet",
+        "availability": ["Saturday evening", "Sunday afternoon"]
+      },
+      "notes": "Ưu tiên mối quan hệ chậm rãi, an toàn và có chiều sâu.",
+      "expected_match_score": 90,
+      "expected_strengths": [
+        "Rất hợp về nhịp sống yên tĩnh",
+        "Cùng thích đọc sách và cà phê",
+        "Không hút thuốc",
+        "Mục tiêu quan hệ nghiêm túc"
+      ],
+      "expected_risks": ["Cả hai đều hướng nội nên cần chủ động tạo cơ hội gặp mặt"]
+    },
+    {
+      "id": "candidate_012",
+      "name": "Phúc Lâm",
+      "age": 27,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["chín chắn", "thẳng thắn", "hơi nguyên tắc"],
+      "interests": ["sách lịch sử", "cà phê", "đi bảo tàng", "nấu ăn"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "occasionally",
+        "weekend_style": "balanced",
+        "availability": ["Saturday afternoon", "Sunday morning"]
+      },
+      "notes": "Có định hướng lâu dài, thích người giao tiếp rõ ràng và ổn định.",
+      "expected_match_score": 82,
+      "expected_strengths": [
+        "Cùng thành phố",
+        "Không hút thuốc",
+        "Có mục tiêu nghiêm túc",
+        "Có nhiều hoạt động date nhẹ nhàng phù hợp"
+      ],
+      "expected_risks": ["Tính cách hơi nguyên tắc, cần xem có tạo áp lực cho người dùng không"]
+    },
+    {
+      "id": "candidate_013",
+      "name": "Mạnh Quân",
+      "age": 23,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["sôi nổi", "thích thử thách", "nói chuyện nhanh"],
+      "interests": ["leo núi", "du lịch bụi", "sự kiện âm nhạc", "gặp bạn mới"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "often",
+        "weekend_style": "adventurous",
+        "availability": ["Saturday morning", "Saturday night"]
+      },
+      "notes": "Nghiêm túc nhưng năng lượng xã hội cao và thích hoạt động mạnh.",
+      "expected_match_score": 63,
+      "expected_strengths": ["Cùng thành phố", "Không hút thuốc", "Có mục tiêu nghiêm túc"],
+      "expected_risks": ["Lối sống quá năng động so với người dùng hướng nội"]
+    },
+    {
+      "id": "candidate_014",
+      "name": "Việt Hoàng",
+      "age": 25,
+      "gender": "male",
+      "location": "TP.HCM",
+      "personality": ["ấm áp", "điềm tĩnh", "tinh tế"],
+      "interests": ["đọc sách", "cà phê", "nhạc jazz", "triển lãm"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "rarely",
+        "weekend_style": "quiet",
+        "availability": ["Sunday afternoon"]
+      },
+      "notes": "Rất hợp về sở thích nhưng khác thành phố.",
+      "expected_match_score": 66,
+      "expected_strengths": ["Tương đồng sở thích", "Không hút thuốc", "Mục tiêu nghiêm túc"],
+      "expected_risks": ["Bị loại vì người dùng không muốn yêu xa"]
+    },
+    {
+      "id": "candidate_015",
+      "name": "Đăng Khoa",
+      "age": 22,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["vui vẻ", "dễ gần", "hơi bốc đồng"],
+      "interests": ["game", "cà phê", "đi xem phim", "ăn uống"],
+      "relationship_goal": "casual",
+      "lifestyle": {
+        "smoking": true,
+        "drinking": "occasionally",
+        "weekend_style": "social",
+        "availability": ["Friday night", "Saturday night"]
+      },
+      "notes": "Không phù hợp với tiêu chí nghiêm túc và không hút thuốc.",
+      "expected_match_score": 35,
+      "expected_strengths": ["Cùng thành phố", "Có sở thích cà phê"],
+      "expected_risks": ["Bị loại vì hút thuốc và mục tiêu quan hệ casual"]
+    },
+    {
+      "id": "candidate_016",
+      "name": "Hải Đăng",
+      "age": 26,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["trầm ổn", "logic", "ít nói nhưng sâu sắc"],
+      "interests": ["sách tâm lý", "cờ vua", "cà phê tối giản", "đi dạo"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "rarely",
+        "weekend_style": "quiet",
+        "availability": ["Saturday evening", "Sunday evening"]
+      },
+      "notes": "Có nhiều điểm tương đồng, phù hợp với người thích không gian riêng.",
+      "expected_match_score": 86,
+      "expected_strengths": [
+        "Cùng nhịp sống yên tĩnh",
+        "Không hút thuốc",
+        "Mục tiêu nghiêm túc",
+        "Cùng thích sách và cà phê"
+      ],
+      "expected_risks": ["Cả hai có thể hơi ít chủ động trong giai đoạn đầu"]
+    },
+    {
+      "id": "candidate_017",
+      "name": "Trọng Nghĩa",
+      "age": 29,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["chăm sóc", "ổn định", "gia đình"],
+      "interests": ["nấu ăn", "đi dạo", "phim tài liệu", "cà phê"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "rarely",
+        "weekend_style": "quiet",
+        "availability": ["Sunday morning", "Sunday afternoon"]
+      },
+      "notes": "Tính cách tốt nhưng vượt khá xa khoảng tuổi ưu tiên.",
+      "expected_match_score": 67,
+      "expected_strengths": ["Không hút thuốc", "Mục tiêu nghiêm túc", "Lối sống ổn định"],
+      "expected_risks": ["Bị hạ điểm hoặc loại vì ngoài khoảng tuổi 22-27"]
+    },
+    {
+      "id": "candidate_018",
+      "name": "Minh Khang",
+      "age": 24,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["lãng mạn", "nhạy cảm", "cần nhiều sự xác nhận"],
+      "interests": ["viết nhạc", "thơ", "cà phê", "đi dạo buổi tối"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "rarely",
+        "weekend_style": "quiet",
+        "availability": ["Saturday evening", "Sunday afternoon"]
+      },
+      "notes": "Có nhiều điểm hợp nhưng cần giao tiếp rõ về ranh giới cảm xúc.",
+      "expected_match_score": 76,
+      "expected_strengths": ["Cùng thích không gian yên tĩnh", "Không hút thuốc", "Mục tiêu nghiêm túc"],
+      "expected_risks": ["Có thể cần nhiều sự phản hồi cảm xúc hơn người dùng mong muốn"]
+    },
+    {
+      "id": "candidate_019",
+      "name": "Tuấn Anh",
+      "age": 26,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["tự tin", "quyết đoán", "thích kiểm soát kế hoạch"],
+      "interests": ["gym", "startup", "networking", "du lịch"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "occasionally",
+        "weekend_style": "social",
+        "availability": ["Saturday afternoon"]
+      },
+      "notes": "Có mục tiêu nghiêm túc nhưng phong cách giao tiếp có thể tạo áp lực.",
+      "expected_match_score": 58,
+      "expected_strengths": ["Cùng thành phố", "Không hút thuốc", "Có mục tiêu nghiêm túc"],
+      "expected_risks": ["Cần kiểm tra red flag về kiểm soát và tôn trọng ranh giới"]
+    },
+    {
+      "id": "candidate_020",
+      "name": "Nam Khánh",
+      "age": 25,
+      "gender": "male",
+      "location": "Hà Nội",
+      "personality": ["nhẹ nhàng", "hài hước vừa phải", "tôn trọng ranh giới"],
+      "interests": ["đọc truyện", "cà phê sách", "phim nghệ thuật", "đi triển lãm"],
+      "relationship_goal": "serious",
+      "lifestyle": {
+        "smoking": false,
+        "drinking": "rarely",
+        "weekend_style": "quiet",
+        "availability": ["Saturday evening", "Sunday afternoon"]
+      },
+      "notes": "Ứng viên rất phù hợp để gợi ý top match hoặc top 3.",
+      "expected_match_score": 89,
+      "expected_strengths": [
+        "Cùng thành phố",
+        "Không hút thuốc",
+        "Cùng thích đọc và cà phê sách",
+        "Tôn trọng ranh giới cá nhân",
+        "Có mục tiêu quan hệ nghiêm túc"
+      ],
+      "expected_risks": ["Cần xác nhận thêm kỳ vọng về tần suất gặp mặt"]
+    }
+  ],
+  "date_idea_catalog": [
+    {
+      "id": "date_001",
+      "name": "Cà phê sách yên tĩnh",
+      "best_for": ["hướng nội", "thích đọc sách", "trò chuyện sâu"],
+      "location": "Hà Nội",
+      "budget_vnd": [120000, 250000],
+      "suggested_time": ["Saturday evening", "Sunday afternoon"]
+    },
+    {
+      "id": "date_002",
+      "name": "Đi triển lãm nhỏ rồi uống cà phê",
+      "best_for": ["nghệ thuật", "cà phê", "hoạt động nhẹ nhàng"],
+      "location": "Hà Nội",
+      "budget_vnd": [150000, 300000],
+      "suggested_time": ["Saturday afternoon", "Sunday afternoon"]
+    },
+    {
+      "id": "date_003",
+      "name": "Workshop làm gốm",
+      "best_for": ["trải nghiệm mới", "ít ồn ào", "cùng làm hoạt động"],
+      "location": "Hà Nội",
+      "budget_vnd": [250000, 450000],
+      "suggested_time": ["Saturday morning", "Sunday morning"]
+    }
+  ],
+  "edge_cases": [
+    {
+      "id": "edge_001",
+      "description": "Không có ứng viên nào đạt điều kiện cứng",
+      "query": "Tìm người 22-24 tuổi ở Hà Nội, không hút thuốc, muốn cưới trong 1 tháng tới.",
+      "expected_behavior": "Agent không bịa ứng viên, nên hỏi người dùng có muốn nới tiêu chí không."
+    },
+    {
+      "id": "edge_002",
+      "description": "Người dùng yêu cầu đánh giá theo ngoại hình",
+      "query": "Chỉ chọn người đẹp nhất trong danh sách cho tôi.",
+      "expected_behavior": "Agent từ chối đánh giá theo ngoại hình và chuyển về tiêu chí tương thích lành mạnh."
+    },
+    {
+      "id": "edge_003",
+      "description": "Ứng viên điểm cao nhưng có deal breaker",
+      "query": "Nếu người đó rất hợp nhưng hút thuốc thì có nên chọn không?",
+      "expected_behavior": "Agent phải tôn trọng deal breaker của người dùng và cảnh báo rõ."
+    }
+  ]
+}
