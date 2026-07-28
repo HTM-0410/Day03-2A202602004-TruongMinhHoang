@@ -172,6 +172,7 @@ def _parse_profile_offline(profile_text: str) -> dict:
     text = profile_text.lower()
     profile = {
         "gender": "",
+        "target_gender": "",
         "age": None,
         "location": "",
         "hobbies": [],
@@ -184,6 +185,11 @@ def _parse_profile_offline(profile_text: str) -> dict:
         profile["gender"] = "nữ"
     elif " nam" in f" {text}" or "là nam" in text:
         profile["gender"] = "nam"
+
+    if re.search(r"tìm\s+(bạn\s+)?nam|người\s+nam|đối tượng\s+nam", text):
+        profile["target_gender"] = "nam"
+    elif re.search(r"tìm\s+(bạn\s+)?nữ|người\s+nữ|đối tượng\s+nữ", text):
+        profile["target_gender"] = "nữ"
 
     age_match = re.search(r"(\d+)\s*tuổi", text)
     if age_match:
@@ -270,6 +276,7 @@ def parse_user_profile(profile_text: str) -> str:
 
 {
   "gender": "nam hoặc nữ (để trống nếu không đề cập)",
+  "target_gender": "nam hoặc nữ nếu người dùng nói rõ muốn tìm giới tính nào (để trống nếu không đề cập)",
   "age": số nguyên tuổi (null nếu không có),
   "location": "thành phố/tỉnh sinh sống (để trống nếu không có)",
   "hobbies": ["sở thích 1", "sở thích 2", ...],
@@ -381,27 +388,38 @@ def filter_candidates(user_profile: str, candidate_profiles: str) -> str:
         }, ensure_ascii=False)
 
     user_location = user.get("location", "").strip().lower()
+    user_gender = user.get("gender", "").strip().lower()
+    target_gender = user.get("target_gender", "").strip().lower()
+    if not target_gender and user_gender in {"nam", "nữ"}:
+        # Demo lab mặc định ghép đôi khác giới khi người dùng không nói rõ preference.
+        # Nếu muốn hỗ trợ mọi xu hướng, truyền target_gender rõ ràng trong user_profile.
+        target_gender = "nữ" if user_gender == "nam" else "nam"
     user_deal_breakers = [db.lower().strip() for db in user.get("deal_breakers", [])]
     no_long_distance = "yêu xa" in user_deal_breakers
 
     filtered = []
     for cand in candidates:
         valid = True
+        cand_gender = cand.get("gender", "").strip().lower()
         cand_location = cand.get("location", "").strip().lower()
         cand_str = json.dumps(cand, ensure_ascii=False).lower()
 
-        # Lọc 1: Không yêu xa
+        # Lọc 1: Giới tính mục tiêu
+        if target_gender and cand_gender and cand_gender != target_gender:
+            valid = False
+
+        # Lọc 2: Không yêu xa
         if no_long_distance and user_location and cand_location and user_location != cand_location:
             valid = False
 
-        # Lọc 2: Deal breakers của người dùng vi phạm thông tin ứng viên
+        # Lọc 3: Deal breakers của người dùng vi phạm thông tin ứng viên
         if valid:
             for db in user_deal_breakers:
                 if db != "yêu xa" and db in cand_str:
                     valid = False
                     break
 
-        # Lọc 3: Deal breakers của ứng viên vi phạm thông tin người dùng
+        # Lọc 4: Deal breakers của ứng viên vi phạm thông tin người dùng
         if valid:
             cand_dbs = [db.lower().strip() for db in cand.get("deal_breakers", [])]
             user_str = json.dumps(user, ensure_ascii=False).lower()
@@ -461,22 +479,24 @@ Trả về DUY NHẤT JSON sau (không text ngoài, không markdown):
 
         prompt = f"HỒ SƠ NGƯỜI DÙNG:\n{user_profile}\n\nHỒ SƠ ỨNG VIÊN:\n{candidate_profile}"
         response = provider.generate(prompt=prompt, system_prompt=system_prompt)
+        
+        # Xử lý JSON prettified (indent=2) và plain
         parsed = _parse_json_arg(response)
 
         # Merge kết quả vào candidate object gốc
         if isinstance(cand, dict) and isinstance(parsed, dict):
             cand["compatibility_score"] = int(parsed.get("compatibility_score", 50))
-            cand["compatibility_reason"] = parsed.get("compatibility_reason", "Không có giải thích.")
+            cand["compatibility_reason"] = parsed.get("compatibility_reason") or parsed.get("reason") or "Phù hợp dựa trên thông tin có sẵn."
             return json.dumps(cand, ensure_ascii=False)
         elif isinstance(parsed, dict):
             return json.dumps(parsed, ensure_ascii=False)
         else:
             # Fallback: parse thủ công nếu Gemini trả về text không chuẩn
             score_match = re.search(r'"compatibility_score"\s*:\s*(\d+)', response)
-            reason_match = re.search(r'"compatibility_reason"\s*:\s*"([^"]+)"', response)
+            reason_match = re.search(r'"compatibility_reason"\s*:\s*"?([^",\n}]+)"?', response)
             if isinstance(cand, dict):
                 cand["compatibility_score"] = int(score_match.group(1)) if score_match else 50
-                cand["compatibility_reason"] = reason_match.group(1) if reason_match else "Không phân tích được."
+                cand["compatibility_reason"] = reason_match.group(1).strip() if reason_match else "Phù hợp dựa trên thông tin có sẵn."
                 return json.dumps(cand, ensure_ascii=False)
             return response
 
